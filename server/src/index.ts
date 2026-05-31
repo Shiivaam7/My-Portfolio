@@ -5,7 +5,7 @@ import { logger } from "./utils/logger";
 function bootstrap() {
   logEnvDiagnostics();
 
-  logger.info("Mail transport: lazy init on first POST /api/contact (no startup verify)");
+  logger.info("Email provider: Resend API (HTTPS — no SMTP ports)");
 
   const app = createApp();
 

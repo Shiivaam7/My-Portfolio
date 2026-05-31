@@ -12,15 +12,11 @@ export function errorHandler(
     err instanceof Error ? err.message : "Internal server error";
 
   const isConfigError =
-    message.includes("GMAIL_") || message.includes("environment variable");
+    message.includes("RESEND_") ||
+    message.includes("GMAIL_") ||
+    message.includes("environment variable");
 
-  const isTimeout =
-    message.includes("ETIMEDOUT") ||
-    (err instanceof Error &&
-      "code" in err &&
-      (err as Error & { code?: string }).code === "ETIMEDOUT");
-
-  const status = isConfigError ? 503 : isTimeout ? 504 : 500;
+  const status = isConfigError ? 503 : 500;
 
   logger.error("Unhandled error", {
     message,

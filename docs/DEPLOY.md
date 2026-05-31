@@ -60,8 +60,8 @@ git push -u origin main
    | Key | Value |
    |-----|--------|
    | `NODE_ENV` | `production` |
-   | `GMAIL_USER` | `shivamraj0k0r@gmail.com` |
-   | `GMAIL_APP_PASSWORD` | your 16-char App Password (no spaces) |
+   | `RESEND_API_KEY` | your key from [resend.com/api-keys](https://resend.com/api-keys) |
+   | `RESEND_FROM_EMAIL` | `onboarding@resend.dev` (or verified domain email) |
    | `CONTACT_TO_EMAIL` | `shivamraj0k0r@gmail.com` |
    | `MAIL_FROM_NAME` | `Shivam Kumar Portfolio` |
    | `FRONTEND_URL` | `http://localhost:3000` (update after Vercel — see Step 4) |
@@ -74,7 +74,7 @@ git push -u origin main
    ```
    Should return `{"status":"ok",...}`
 
-8. Check **Logs** for: `Nodemailer transporter.verify() succeeded`
+8. Check **Logs** for: `Resend emails.send() succeeded`
 
 ---
 
@@ -147,7 +147,7 @@ git push -u origin main
 |---------|-----|
 | Contact form network error | Check `NEXT_PUBLIC_CONTACT_API_URL` on Vercel; wake Render (free tier sleeps) |
 | CORS error | Add exact Vercel URL to Render `FRONTEND_URL` |
-| Email not sending | Check Render logs; verify Gmail App Password on Render |
+| Email not sending | Check `RESEND_API_KEY` and `RESEND_FROM_EMAIL` in Render logs |
 | Resume 404 | Ensure `public/resume.pdf` is committed: `git add public/resume.pdf` |
 | Render slow first request | Free tier cold start ~30–60s — normal |
 
@@ -177,7 +177,7 @@ npm run generate:resume
 - `NEXT_PUBLIC_SITE_URL`
 
 **Render (backend only)**
-- `GMAIL_USER`, `GMAIL_APP_PASSWORD`, `CONTACT_TO_EMAIL`
+- `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `CONTACT_TO_EMAIL`
 - `FRONTEND_URL`, `NODE_ENV`, `MAIL_FROM_NAME`
 
 Never put Gmail password on Vercel.

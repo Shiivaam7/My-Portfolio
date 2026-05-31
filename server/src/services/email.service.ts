@@ -1,77 +1,45 @@
-import nodemailer from "nodemailer";
-import type { Transporter } from "nodemailer";
+import { Resend } from "resend";
 import { assertEmailConfig, env } from "../config/env";
 import { logger } from "../utils/logger";
 import type { ContactPayload } from "../utils/validators";
 
-let transporter: Transporter | null = null;
+let resendClient: Resend | null = null;
 
-const SMTP_CONFIG = {
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  requireTLS: true,
-} as const;
-
-/** Created lazily on first contact form submission (not at server startup). */
-function createMailTransporter(): Transporter {
+function getResendClient(): Resend {
   assertEmailConfig();
-
-  logger.info("Creating Nodemailer transporter (on-demand)", {
-    host: SMTP_CONFIG.host,
-    port: SMTP_CONFIG.port,
-    secure: SMTP_CONFIG.secure,
-    requireTLS: SMTP_CONFIG.requireTLS,
-    authUser: env.gmailUser,
-  });
-
-  return nodemailer.createTransport({
-    host: SMTP_CONFIG.host,
-    port: SMTP_CONFIG.port,
-    secure: SMTP_CONFIG.secure,
-    requireTLS: SMTP_CONFIG.requireTLS,
-    auth: {
-      user: env.gmailUser,
-      pass: env.gmailAppPassword,
-    },
-    tls: {
-      minVersion: "TLSv1.2",
-    },
-    connectionTimeout: 20_000,
-    greetingTimeout: 20_000,
-    socketTimeout: 30_000,
-  });
+  if (!resendClient) {
+    logger.info("Initializing Resend client (on-demand)", {
+      from: env.resendFromEmail,
+      to: env.contactToEmail,
+    });
+    resendClient = new Resend(env.resendApiKey);
+  }
+  return resendClient;
 }
 
-function getTransporter(): Transporter {
-  if (!transporter) {
-    transporter = createMailTransporter();
-  }
-  return transporter;
+function formatFromAddress(): string {
+  return `${env.mailFromName} <${env.resendFromEmail}>`;
 }
 
 export async function sendContactEmail(
   payload: ContactPayload
 ): Promise<void> {
   const startedAt = Date.now();
-  const transport = getTransporter();
+  const resend = getResendClient();
+  const subject = `[Portfolio] ${payload.subject}`;
 
-  const mailOptions = {
-    from: `"${env.mailFromName}" <${env.gmailUser}>`,
-    to: env.contactToEmail,
-    replyTo: payload.email,
-    subject: `[Portfolio] ${payload.subject}`,
-    text: [
-      "New portfolio contact message",
-      "",
-      `Name: ${payload.name}`,
-      `Email: ${payload.email}`,
-      `Subject: ${payload.subject}`,
-      "",
-      "Message:",
-      payload.message,
-    ].join("\n"),
-    html: `
+  const text = [
+    "New portfolio contact message",
+    "",
+    `Name: ${payload.name}`,
+    `Email: ${payload.email}`,
+    `Subject: ${payload.subject}`,
+    "",
+    "Message:",
+    payload.message,
+  ].join("\n");
+
+  const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px;">
       <h2 style="color: #915EFF;">New portfolio contact message</h2>
       <p><strong>Name:</strong> ${escapeHtml(payload.name)}</p>
@@ -81,47 +49,48 @@ export async function sendContactEmail(
       <p><strong>Message:</strong></p>
       <p style="white-space: pre-wrap;">${escapeHtml(payload.message)}</p>
     </div>
-  `,
-  };
+  `;
 
-  logger.info("sendMail() starting", {
+  logger.info("Resend emails.send() starting", {
+    from: formatFromAddress(),
     to: env.contactToEmail,
     replyTo: payload.email,
-    subject: mailOptions.subject,
+    subject,
   });
 
   try {
-    const info = await transport.sendMail(mailOptions);
+    const { data, error } = await resend.emails.send({
+      from: formatFromAddress(),
+      to: [env.contactToEmail],
+      replyTo: payload.email,
+      subject,
+      text,
+      html,
+    });
 
-    logger.info("sendMail() succeeded", {
-      messageId: info.messageId,
-      accepted: info.accepted,
-      rejected: info.rejected,
+    if (error) {
+      logger.error("Resend emails.send() returned error", {
+        name: error.name,
+        message: error.message,
+        durationMs: Date.now() - startedAt,
+      });
+      throw new Error(error.message);
+    }
+
+    logger.info("Resend emails.send() succeeded", {
+      messageId: data?.id,
       durationMs: Date.now() - startedAt,
     });
   } catch (error) {
-    const err = error as Error & { code?: string };
-    logger.error("sendMail() failed", {
-      code: err.code,
+    const err = error as Error;
+    logger.error("Resend emails.send() failed", {
       message: err.message,
       durationMs: Date.now() - startedAt,
-      hint: getSendFailureHint(err),
+      hint: "Verify RESEND_API_KEY and RESEND_FROM_EMAIL in Resend dashboard",
     });
-
-    // Reset so next request gets a fresh connection
-    transporter = null;
+    resendClient = null;
     throw error;
   }
-}
-
-function getSendFailureHint(err: Error & { code?: string }): string {
-  if (err.code === "ETIMEDOUT" || err.message?.includes("ETIMEDOUT")) {
-    return "SMTP connection timed out. Render may block port 465; using 587+STARTTLS. Retry or check Render outbound network.";
-  }
-  if (err.message?.includes("535") || err.code === "EAUTH") {
-    return "Gmail auth failed — use a 16-character App Password, not your login password.";
-  }
-  return "Check GMAIL_USER and GMAIL_APP_PASSWORD on Render.";
 }
 
 function escapeHtml(value: string): string {

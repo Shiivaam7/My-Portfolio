@@ -33,7 +33,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ### Contact form (Express API)
 
-The contact form uses a separate Express backend with Gmail/Nodemailer.
+The contact form uses a separate Express backend with the Resend API (no SMTP).
 
 **Full setup:** see [docs/CONTACT_SETUP.md](docs/CONTACT_SETUP.md)
 

@@ -10,11 +10,11 @@ services:
         value: production
       - key: FRONTEND_URL
         sync: false
-      - key: GMAIL_USER
+      - key: RESEND_API_KEY
         sync: false
-      - key: GMAIL_APP_PASSWORD
-        sync: false
+      - key: RESEND_FROM_EMAIL
+        value: onboarding@resend.dev
       - key: CONTACT_TO_EMAIL
-        sync: false
+        value: shivamraj0k0r@gmail.com
       - key: MAIL_FROM_NAME
         value: Shivam Kumar Portfolio
