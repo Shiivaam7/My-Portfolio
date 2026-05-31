@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: shiko-portfolio-api
+    runtime: node
+    rootDir: server
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: FRONTEND_URL
+        sync: false
+      - key: GMAIL_USER
+        sync: false
+      - key: GMAIL_APP_PASSWORD
+        sync: false
+      - key: CONTACT_TO_EMAIL
+        sync: false
+      - key: MAIL_FROM_NAME
+        value: Shivam Kumar Portfolio
