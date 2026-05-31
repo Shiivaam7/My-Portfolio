@@ -37,6 +37,11 @@ export async function postContact(
       return;
     }
 
+    logger.info("Contact form submission received", {
+      fromEmail: payload.email,
+      subject: payload.subject,
+    });
+
     await sendContactEmail(payload);
 
     res.status(200).json({

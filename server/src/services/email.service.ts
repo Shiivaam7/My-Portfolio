@@ -6,81 +6,72 @@ import type { ContactPayload } from "../utils/validators";
 
 let transporter: Transporter | null = null;
 
-/** Gmail SMTP — explicit host is more reliable than service: "gmail" alone */
-export function createMailTransporter(): Transporter {
+const SMTP_CONFIG = {
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  requireTLS: true,
+} as const;
+
+/** Created lazily on first contact form submission (not at server startup). */
+function createMailTransporter(): Transporter {
   assertEmailConfig();
 
+  logger.info("Creating Nodemailer transporter (on-demand)", {
+    host: SMTP_CONFIG.host,
+    port: SMTP_CONFIG.port,
+    secure: SMTP_CONFIG.secure,
+    requireTLS: SMTP_CONFIG.requireTLS,
+    authUser: env.gmailUser,
+  });
+
   return nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
+    host: SMTP_CONFIG.host,
+    port: SMTP_CONFIG.port,
+    secure: SMTP_CONFIG.secure,
+    requireTLS: SMTP_CONFIG.requireTLS,
     auth: {
       user: env.gmailUser,
       pass: env.gmailAppPassword,
     },
-  });
-}
-
-export function logTransporterConfig(): void {
-  logger.info("Nodemailer transporter configuration (secrets excluded)", {
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    service: "gmail-smtp",
-    auth: {
-      user: env.gmailUser,
-      pass: "[REDACTED]",
-      passLength: env.gmailAppPassword.length,
+    tls: {
+      minVersion: "TLSv1.2",
     },
+    connectionTimeout: 20_000,
+    greetingTimeout: 20_000,
+    socketTimeout: 30_000,
   });
-}
-
-export async function verifyMailTransport(): Promise<void> {
-  assertEmailConfig();
-  logTransporterConfig();
-
-  const transport = createMailTransporter();
-
-  try {
-    await transport.verify();
-    logger.info("Nodemailer transporter.verify() succeeded — Gmail SMTP auth OK");
-    transporter = transport;
-  } catch (error) {
-    const err = error as Error & { code?: string; response?: string };
-    logger.error("Nodemailer transporter.verify() failed", {
-      code: err.code,
-      message: err.message,
-      hint: getAuthFailureHint(err),
-    });
-    throw error;
-  }
-}
-
-function getAuthFailureHint(err: Error & { code?: string }): string {
-  if (err.message?.includes("535") || err.code === "EAUTH") {
-    return [
-      "Gmail rejected username/password (535).",
-      "Use an App Password from Google Account → Security → 2-Step Verification → App passwords.",
-      "GMAIL_USER must match the Google account that created the App Password.",
-      "Do not use your normal Gmail login password.",
-      "Remove spaces from the 16-character App Password in server/.env.",
-    ].join(" ");
-  }
-  return "Check server/.env and Gmail App Password settings.";
 }
 
 function getTransporter(): Transporter {
-  if (transporter) return transporter;
-  transporter = createMailTransporter();
+  if (!transporter) {
+    transporter = createMailTransporter();
+  }
   return transporter;
 }
 
 export async function sendContactEmail(
   payload: ContactPayload
 ): Promise<void> {
+  const startedAt = Date.now();
   const transport = getTransporter();
 
-  const html = `
+  const mailOptions = {
+    from: `"${env.mailFromName}" <${env.gmailUser}>`,
+    to: env.contactToEmail,
+    replyTo: payload.email,
+    subject: `[Portfolio] ${payload.subject}`,
+    text: [
+      "New portfolio contact message",
+      "",
+      `Name: ${payload.name}`,
+      `Email: ${payload.email}`,
+      `Subject: ${payload.subject}`,
+      "",
+      "Message:",
+      payload.message,
+    ].join("\n"),
+    html: `
     <div style="font-family: Arial, sans-serif; max-width: 600px;">
       <h2 style="color: #915EFF;">New portfolio contact message</h2>
       <p><strong>Name:</strong> ${escapeHtml(payload.name)}</p>
@@ -90,33 +81,47 @@ export async function sendContactEmail(
       <p><strong>Message:</strong></p>
       <p style="white-space: pre-wrap;">${escapeHtml(payload.message)}</p>
     </div>
-  `;
+  `,
+  };
 
-  const text = [
-    "New portfolio contact message",
-    "",
-    `Name: ${payload.name}`,
-    `Email: ${payload.email}`,
-    `Subject: ${payload.subject}`,
-    "",
-    "Message:",
-    payload.message,
-  ].join("\n");
-
-  await transport.sendMail({
-    from: `"${env.mailFromName}" <${env.gmailUser}>`,
+  logger.info("sendMail() starting", {
     to: env.contactToEmail,
     replyTo: payload.email,
-    subject: `[Portfolio] ${payload.subject}`,
-    text,
-    html,
+    subject: mailOptions.subject,
   });
 
-  logger.info("Contact email sent", {
-    to: env.contactToEmail,
-    from: payload.email,
-    subject: payload.subject,
-  });
+  try {
+    const info = await transport.sendMail(mailOptions);
+
+    logger.info("sendMail() succeeded", {
+      messageId: info.messageId,
+      accepted: info.accepted,
+      rejected: info.rejected,
+      durationMs: Date.now() - startedAt,
+    });
+  } catch (error) {
+    const err = error as Error & { code?: string };
+    logger.error("sendMail() failed", {
+      code: err.code,
+      message: err.message,
+      durationMs: Date.now() - startedAt,
+      hint: getSendFailureHint(err),
+    });
+
+    // Reset so next request gets a fresh connection
+    transporter = null;
+    throw error;
+  }
+}
+
+function getSendFailureHint(err: Error & { code?: string }): string {
+  if (err.code === "ETIMEDOUT" || err.message?.includes("ETIMEDOUT")) {
+    return "SMTP connection timed out. Render may block port 465; using 587+STARTTLS. Retry or check Render outbound network.";
+  }
+  if (err.message?.includes("535") || err.code === "EAUTH") {
+    return "Gmail auth failed — use a 16-character App Password, not your login password.";
+  }
+  return "Check GMAIL_USER and GMAIL_APP_PASSWORD on Render.";
 }
 
 function escapeHtml(value: string): string {

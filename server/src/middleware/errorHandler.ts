@@ -14,7 +14,13 @@ export function errorHandler(
   const isConfigError =
     message.includes("GMAIL_") || message.includes("environment variable");
 
-  const status = isConfigError ? 503 : 500;
+  const isTimeout =
+    message.includes("ETIMEDOUT") ||
+    (err instanceof Error &&
+      "code" in err &&
+      (err as Error & { code?: string }).code === "ETIMEDOUT");
+
+  const status = isConfigError ? 503 : isTimeout ? 504 : 500;
 
   logger.error("Unhandled error", {
     message,
