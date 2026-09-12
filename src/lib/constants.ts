@@ -6,8 +6,7 @@ export const SITE = {
   phone: "+91 9097925538",
   github: "https://github.com/Shiivaam7",
   linkedin: "https://www.linkedin.com/in/shivam-kumar-b67984348/",
-  /** Add your PDF to public/resume.pdf */
-  resumeUrl: "/resume.pdf",
+  resumeUrl: "/Shivam%20Kumar%20(1).pdf",
 } as const;
 
 export const COLORS = {
