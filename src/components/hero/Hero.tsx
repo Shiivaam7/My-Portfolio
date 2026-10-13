@@ -6,7 +6,6 @@ import { SITE } from "@/lib/constants";
 import { useTypingEffect } from "@/hooks/useTypingEffect";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { ParticlesBackground } from "./ParticlesBackground";
-import { ShikoAssistant } from "./ShikoAssistant";
 
 const HeroScene = dynamic(() => import("./HeroScene").then((m) => m.HeroScene), {
   ssr: false,
@@ -123,7 +122,6 @@ export function Hero() {
         </motion.div>
       </div>
 
-      <ShikoAssistant />
     </section>
   );
 }
