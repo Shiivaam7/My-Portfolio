@@ -100,7 +100,7 @@ export const NAV_LINKS = [
 ] as const;
 
 export const LOADER_STEPS = [
-  "INITIALIZING SHIKO AI...",
+  "INITIALIZING 3D CORE...",
   "Loading Neural Systems",
   "Loading Projects",
   "Portfolio Ready",
