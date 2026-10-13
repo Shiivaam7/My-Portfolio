@@ -16,6 +16,13 @@ export type Certification = {
 
 export const CERTIFICATIONS: Certification[] = [
   {
+    id: "void-hacks-8",
+    name: "Void Hacks() 8.0 — Hackathon Participation",
+    provider: "Shri Vaishnav Vidyapeeth Vishwavidyalaya · Void Hacks",
+    issued: "Oct 2026",
+    file: "/certificates/void-hacks-8-participation.jpg",
+  },
+  {
     id: "aws-ml-foundations",
     name: "AWS Academy Graduate — Machine Learning Foundations",
     provider: "AWS Academy",
