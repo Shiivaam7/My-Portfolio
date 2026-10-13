@@ -9,6 +9,7 @@ interface ProjectCardProps {
   description: string;
   tech: readonly string[];
   github: string;
+  liveDemo?: string;
   gradient: string;
   index: number;
 }
@@ -18,6 +19,7 @@ export function ProjectCard({
   description,
   tech,
   github,
+  liveDemo,
   gradient,
   index,
 }: ProjectCardProps) {
@@ -89,15 +91,28 @@ export function ProjectCard({
           ))}
         </div>
 
-        <a
-          href={github}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="relative inline-flex items-center gap-2 text-sm font-medium text-[#00FFFF] transition-colors hover:text-white"
-        >
-          View on GitHub
-          <span className="transition-transform group-hover:translate-x-1">→</span>
-        </a>
+        <div className="relative flex flex-wrap items-center gap-4">
+          {liveDemo && (
+            <a
+              href={liveDemo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg border border-[#00FFFF]/30 bg-[#00FFFF]/10 px-4 py-2 text-sm font-medium text-[#00FFFF] transition-colors hover:bg-[#00FFFF]/20"
+            >
+              Live Demo
+              <span aria-hidden="true">↗</span>
+            </a>
+          )}
+          <a
+            href={github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[#00FFFF] transition-colors hover:text-white"
+          >
+            View on GitHub
+            <span className="transition-transform group-hover:translate-x-1">→</span>
+          </a>
+        </div>
       </div>
     </motion.article>
   );

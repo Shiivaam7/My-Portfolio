@@ -1,4 +1,4 @@
-# 🚀 Shiko AI Portfolio
+# Shivam Kumar Portfolio
 
 A modern AI/ML Engineer portfolio built with Next.js, TypeScript, Tailwind CSS, and a secure contact system powered by Resend API.
 
@@ -173,11 +173,10 @@ Ultra-modern, dark futuristic portfolio for **Shivam Kumar**, AI/ML Engineer and
 ## Features
 
 - Full-screen hero with 3D AI sphere, particle network, typing animation
-- SHIKO AI floating assistant
 - Glassmorphism sections with animated counters
 - 3D tilt skill cards & premium project cards
 - Animated timeline & certification cards
-- Page loader: "INITIALIZING SHIKO AI..."
+- 3D portfolio loader branded SHIVAM.DEV
 - Magnetic buttons, scroll reveals, mouse parallax
 - Fully responsive (desktop, tablet, mobile)
 

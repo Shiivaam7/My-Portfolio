@@ -8,20 +8,16 @@ export type Certification = {
   name: string;
   provider: string;
   issued?: string;
+  eventDates?: string;
   credentialId?: string;
   verifyUrl?: string;
   /** Path under public/, e.g. /certificates/my-cert.pdf */
   file?: string;
+  fileOptional?: boolean;
+  details?: string[];
 };
 
 export const CERTIFICATIONS: Certification[] = [
-  {
-    id: "void-hacks-8",
-    name: "Void Hacks() 8.0 — Hackathon Participation",
-    provider: "Shri Vaishnav Vidyapeeth Vishwavidyalaya · Void Hacks",
-    issued: "Oct 2026",
-    file: "/certificates/void-hacks-8-participation.jpg",
-  },
   {
     id: "aws-ml-foundations",
     name: "AWS Academy Graduate — Machine Learning Foundations",
@@ -43,6 +39,20 @@ export const CERTIFICATIONS: Certification[] = [
     provider: "Training Program",
     issued: "Dec 2025",
     file: "/certificates/CourseAttendance20251203-32-nmkvab.pdf",
+  },
+  {
+    id: "void-hacks-8-participation",
+    name: "Void Hacks() 8.0 — Hackathon Participation",
+    provider: "Void Hacks() 8.0",
+    eventDates: "October 1–3, 2026",
+    file: "/certificates/void hack.pdf",
+    details: [
+      "Participant: Shivam Kumar",
+      "Team: Vision X",
+      "University: Sage University",
+      "Organizer: Shri Vaishnav Vishwavidyalaya, Indore, in collaboration with the Commissionerate of Police Indore",
+      "Certificate type: Participation Certificate",
+    ],
   },
 ];
 

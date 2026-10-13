@@ -56,9 +56,10 @@ export function CertificationCard({
         <div className={variant === "grid" ? "text-center" : "text-left"}>
           <h3 className="text-lg font-bold text-white">{cert.name}</h3>
           <p className="text-sm text-white/50">{cert.provider}</p>
-          {(cert.issued || cert.credentialId) && (
+          {(cert.issued || cert.eventDates || cert.credentialId) && (
             <p className="mt-1 font-mono text-xs text-[#00FFFF]/70">
-              {cert.issued && `Issued ${cert.issued}`}
+              {cert.eventDates && `Event dates ${cert.eventDates}`}
+              {cert.issued && !cert.eventDates && `Issued ${cert.issued}`}
               {cert.issued && cert.credentialId && " · "}
               {cert.credentialId && `ID: ${cert.credentialId}`}
             </p>

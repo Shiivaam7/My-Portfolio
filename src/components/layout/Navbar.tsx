@@ -30,8 +30,8 @@ export function Navbar() {
             S
           </span>
           <span className="font-mono text-sm tracking-wider">
-            <span className="text-[#915EFF]">SHIKO</span>
-            <span className="text-white/60"> AI</span>
+            <span className="text-[#915EFF]">SHIVAM</span>
+            <span className="text-white/60">.DEV</span>
           </span>
         </a>
 

@@ -6,7 +6,7 @@ export const SITE = {
   phone: "+91 9097925538",
   github: "https://github.com/Shiivaam7",
   linkedin: "https://www.linkedin.com/in/shivam-kumar-b67984348/",
-  resumeUrl: "/Shivam%20Kumar%20(1).pdf",
+  resumeUrl: "/shivam%20kumar.pdf",
 } as const;
 
 export const COLORS = {
@@ -59,13 +59,14 @@ export const PROJECTS = [
     gradient: "from-[#915EFF] to-[#00FFFF]",
   },
   {
-    id: "ipl-analysis",
-    title: "IPL Cricket Data Analysis",
+    id: "classmate-ai",
+    title: "Classmate AI",
     description:
-      "Analyzed IPL dataset from 2008-2024 using Python for insights and visual storytelling.",
-    tech: ["Pandas", "Matplotlib", "Jupyter"],
-    github: "https://github.com/Shiivaam7/IPL-Cricket-Data-Analysis-2008-2024-",
-    gradient: "from-[#00FFFF] to-[#915EFF]",
+      "An AI-powered learning companion designed to make studying smarter through intelligent assistance, interactive learning, and AI-driven academic support.",
+    tech: ["Python", "Streamlit", "Supabase", "dlib", "scikit-learn", "NumPy"],
+    github: "https://github.com/Shiivaam7/Class_mate_Ai",
+    liveDemo: "https://classmate-main.streamlit.app/",
+    gradient: "from-[#915EFF] to-[#00FFFF]",
   },
   {
     id: "insta-bot",
@@ -101,9 +102,9 @@ export const NAV_LINKS = [
 
 export const LOADER_STEPS = [
   "INITIALIZING 3D CORE...",
-  "Loading Neural Systems",
-  "Loading Projects",
-  "Portfolio Ready",
+  "LOADING PROJECTS...",
+  "INITIALIZING PORTFOLIO...",
+  "PORTFOLIO READY",
 ] as const;
 
 export const ABOUT_COUNTERS = [

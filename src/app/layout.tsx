@@ -17,19 +17,19 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Shivam Kumar | AI/ML Engineer Portfolio",
   description:
-    "Portfolio of Shivam Kumar — AI/ML Engineer, Data Science Enthusiast, and B.Tech AI & ML Student. Built on SHIKO AI Operating System.",
+    "Portfolio of Shivam Kumar — AI/ML Engineer, Data Science Enthusiast, and B.Tech AI & ML Student.",
   keywords: [
     "AI",
     "Machine Learning",
     "Data Science",
     "Portfolio",
     "Shivam Kumar",
-    "SHIKO AI",
+    "Shivam Kumar",
   ],
   authors: [{ name: "Shivam Kumar" }],
   openGraph: {
     title: "Shivam Kumar | AI/ML Engineer",
-    description: "Futuristic AI/ML Engineer Portfolio — SHIKO AI OS",
+    description: "AI/ML Engineer portfolio of Shivam Kumar.",
     type: "website",
   },
 };

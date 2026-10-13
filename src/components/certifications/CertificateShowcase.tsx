@@ -14,7 +14,7 @@ function useCertificateFile(cert: Certification) {
   const [isPdf, setIsPdf] = useState(false);
 
   useEffect(() => {
-    if (cert.file) {
+    if (cert.file && !cert.fileOptional) {
       const path = getCertificateFileCandidates(cert)[0];
       setSrc(path);
       setIsPdf(path.toLowerCase().endsWith(".pdf"));
@@ -61,6 +61,9 @@ function ShowcaseCard({
 }) {
   const { src, isPdf } = useCertificateFile(cert);
   const hasVerify = Boolean(cert.verifyUrl?.trim());
+  const expectedFile = cert.file
+    ? `public${cert.file}`
+    : `public/certificates/${cert.id}.png`;
 
   return (
     <motion.article
@@ -105,7 +108,7 @@ function ShowcaseCard({
             <p className="text-xs text-white/40">
               Add file:{" "}
               <code className="text-[#00FFFF]/70">
-                public/certificates/{cert.id}.png
+                {expectedFile}
               </code>
             </p>
           </div>
@@ -118,11 +121,20 @@ function ShowcaseCard({
         </div>
         <h3 className="text-lg font-bold text-white">{cert.name}</h3>
         <p className="text-sm text-white/50">{cert.provider}</p>
-        {cert.issued && (
+        {(cert.issued || cert.eventDates) && (
           <p className="mt-1 font-mono text-xs text-white/40">
-            Issued {cert.issued}
+            {cert.eventDates
+              ? `Event dates ${cert.eventDates}`
+              : `Issued ${cert.issued}`}
             {cert.credentialId ? ` · ID ${cert.credentialId}` : ""}
           </p>
+        )}
+        {cert.details && (
+          <ul className="mt-3 space-y-1 text-xs leading-relaxed text-white/45">
+            {cert.details.map((detail) => (
+              <li key={detail}>{detail}</li>
+            ))}
+          </ul>
         )}
         <div className="mt-4 flex flex-wrap gap-2">
           {hasVerify && (
@@ -142,7 +154,7 @@ function ShowcaseCard({
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 rounded-lg border border-[#915EFF]/30 bg-[#915EFF]/10 px-4 py-2 text-xs font-medium text-[#915EFF]"
             >
-              View file ↗
+              {isPdf ? "View file ↗" : "Open full image ↗"}
             </a>
           )}
         </div>

@@ -109,3 +109,154 @@ body {
 .animate-pulse-glow {
   animation: pulse-glow 3s ease-in-out infinite;
 }
+
+.loader-ambient {
+  position: absolute;
+  width: min(70vw, 34rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 255, 255, 0.1), rgba(145, 94, 255, 0.06) 38%, transparent 70%);
+  filter: blur(20px);
+}
+
+.loader-stage {
+  position: relative;
+  display: grid;
+  width: clamp(190px, 55vw, 280px);
+  aspect-ratio: 1;
+  place-items: center;
+  perspective: 900px;
+  margin-bottom: 1.5rem;
+}
+
+.loader-core {
+  position: relative;
+  display: grid;
+  width: 42%;
+  aspect-ratio: 1;
+  place-items: center;
+  transform-style: preserve-3d;
+  animation: loader-core-float 4s ease-in-out infinite;
+}
+
+.loader-cube {
+  position: relative;
+  width: 46%;
+  aspect-ratio: 1;
+  transform-style: preserve-3d;
+  animation: loader-cube-spin 9s linear infinite;
+}
+
+.loader-cube span {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(0, 255, 255, 0.75);
+  background: linear-gradient(145deg, rgba(0, 255, 255, 0.15), rgba(145, 94, 255, 0.12) 55%, rgba(255, 0, 255, 0.08));
+  box-shadow: inset 0 0 18px rgba(0, 255, 255, 0.13), 0 0 14px rgba(0, 255, 255, 0.14);
+  backdrop-filter: blur(2px);
+}
+
+.loader-cube span:nth-child(1) { transform: translateZ(28px); }
+.loader-cube span:nth-child(2) { transform: rotateY(180deg) translateZ(28px); }
+.loader-cube span:nth-child(3) { transform: rotateY(90deg) translateZ(28px); }
+.loader-cube span:nth-child(4) { transform: rotateY(-90deg) translateZ(28px); }
+.loader-cube span:nth-child(5) { transform: rotateX(90deg) translateZ(28px); }
+.loader-cube span:nth-child(6) { transform: rotateX(-90deg) translateZ(28px); }
+
+.loader-core-glow {
+  position: absolute;
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid rgba(145, 94, 255, 0.4);
+  border-radius: 50%;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.2), inset 0 0 28px rgba(145, 94, 255, 0.14);
+  transform: rotateX(68deg) rotateZ(20deg);
+}
+
+.loader-orbit {
+  position: absolute;
+  width: 92%;
+  height: 38%;
+  border: 1px solid rgba(0, 255, 255, 0.55);
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(0, 255, 255, 0.16), inset 0 0 12px rgba(0, 255, 255, 0.08);
+  transform-style: preserve-3d;
+}
+
+.loader-orbit-one { animation: loader-orbit-spin-one 8s linear infinite; }
+
+.loader-orbit-two {
+  width: 78%;
+  height: 56%;
+  border-color: rgba(145, 94, 255, 0.75);
+  box-shadow: 0 0 14px rgba(145, 94, 255, 0.2), inset 0 0 12px rgba(145, 94, 255, 0.08);
+  animation: loader-orbit-spin-two 11s linear infinite;
+}
+
+.loader-orbit-three {
+  width: 100%;
+  height: 24%;
+  border-color: rgba(255, 0, 255, 0.5);
+  box-shadow: 0 0 12px rgba(255, 0, 255, 0.14);
+  animation: loader-orbit-spin-three 6s linear infinite;
+}
+
+.loader-particles {
+  position: absolute;
+  inset: 0;
+  animation: loader-particles-spin 18s linear infinite;
+}
+
+.loader-particles span {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #00ffff;
+  box-shadow: 0 0 10px 2px rgba(0, 255, 255, 0.55);
+}
+
+.loader-particles span:nth-child(2) { top: 26%; left: 84%; }
+.loader-particles span:nth-child(3) { top: 72%; left: 88%; background: #ff00ff; }
+.loader-particles span:nth-child(4) { top: 90%; left: 48%; }
+.loader-particles span:nth-child(5) { top: 67%; left: 12%; background: #915eff; }
+.loader-particles span:nth-child(6) { top: 24%; left: 16%; }
+
+@keyframes loader-core-float {
+  0%, 100% { transform: translateY(0) rotateX(-8deg); }
+  50% { transform: translateY(-7px) rotateX(8deg); }
+}
+
+@keyframes loader-cube-spin {
+  to { transform: rotateX(360deg) rotateY(720deg) rotateZ(360deg); }
+}
+
+@keyframes loader-orbit-spin-one {
+  from { transform: rotateX(68deg) rotateZ(0); }
+  to { transform: rotateX(68deg) rotateZ(360deg); }
+}
+
+@keyframes loader-orbit-spin-two {
+  from { transform: rotateY(62deg) rotateZ(0); }
+  to { transform: rotateY(62deg) rotateZ(-360deg); }
+}
+
+@keyframes loader-orbit-spin-three {
+  from { transform: rotateX(78deg) rotateZ(0); }
+  to { transform: rotateX(78deg) rotateZ(360deg); }
+}
+
+@keyframes loader-particles-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader-core,
+  .loader-cube,
+  .loader-orbit,
+  .loader-particles {
+    animation: none;
+  }
+}

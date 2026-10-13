@@ -45,17 +45,13 @@ export function About() {
               <div className="absolute -top-20 -right-20 h-40 w-40 rounded-full bg-[#915EFF]/20 blur-3xl" />
               <div className="absolute -bottom-20 -left-20 h-40 w-40 rounded-full bg-[#00FFFF]/10 blur-3xl" />
               <p className="relative text-lg leading-relaxed text-white/80 md:text-xl">
-                B.Tech <span className="text-[#915EFF]">AI &amp; ML</span> student passionate
-                about{" "}
-                <span className="text-[#00FFFF]">Artificial Intelligence</span>,{" "}
-                <span className="text-[#915EFF]">Machine Learning</span>,{" "}
-                <span className="text-[#FF00FF]">Data Science</span>,{" "}
-                <span className="text-white">Automation</span> and intelligent systems.
+                B.Tech AI &amp; ML student passionate about building intelligent
+                systems powered by Artificial Intelligence, Machine Learning, and
+                Data Science. Focused on developing real-world AI solutions,
+                LLM-powered applications, Retrieval-Augmented Generation (RAG)
+                systems, and intelligent automation that transform ideas into
+                impactful technology.
               </p>
-              <div className="mt-8 flex items-center gap-4">
-                <div className="h-px flex-1 bg-gradient-to-r from-[#915EFF] to-transparent" />
-                <span className="font-mono text-xs text-[#00FFFF]/60">SHIKO.OS</span>
-              </div>
             </div>
           </FadeUp>
 
