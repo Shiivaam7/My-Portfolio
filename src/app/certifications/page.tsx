@@ -35,7 +35,7 @@ export default function CertificationsPage() {
             ← Portfolio
           </Link>
           <span className="font-mono text-xs tracking-widest text-[#915EFF]">
-            SHIKO AI · CREDENTIALS
+            SHIVAM.DEV · CREDENTIALS
           </span>
         </div>
       </header>
