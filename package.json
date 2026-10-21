@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run generate:resume && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "dev:api": "npm run dev --prefix server",
