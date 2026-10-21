@@ -6,7 +6,7 @@ export const SITE = {
   phone: "+91 9097925538",
   github: "https://github.com/Shiivaam7",
   linkedin: "https://www.linkedin.com/in/shivam-kumar-b67984348/",
-  resumeUrl: "/resume.pdf",
+  resumeUrl: "/shivam%20kumar.pdf",
 } as const;
 
 export const COLORS = {

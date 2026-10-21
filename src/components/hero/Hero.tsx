@@ -93,7 +93,7 @@ export function Hero() {
         >
           <MagneticButton
             href={SITE.resumeUrl}
-            download="Shivam_Kumar_Resume.pdf"
+            download="Shivam_Kumar.pdf"
             variant="primary"
           >
             Download Resume

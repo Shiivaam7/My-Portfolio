@@ -10,6 +10,7 @@ import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const legacyOutPath = path.join(__dirname, "..", "public", "shivam kumar.pdf");
+const underscoreOutPath = path.join(__dirname, "..", "public", "Shivam_Kumar.pdf");
 const standardOutPath = path.join(__dirname, "..", "public", "resume.pdf");
 
 const resume = {
@@ -112,6 +113,8 @@ line("Participation in a hackathon focused on collaborative problem-solving and 
 const pdfBytes = await doc.save();
 fs.mkdirSync(path.dirname(legacyOutPath), { recursive: true });
 fs.writeFileSync(legacyOutPath, pdfBytes);
+fs.writeFileSync(underscoreOutPath, pdfBytes);
 fs.writeFileSync(standardOutPath, pdfBytes);
 console.log(`Resume written to ${legacyOutPath}`);
+console.log(`Resume written to ${underscoreOutPath}`);
 console.log(`Resume written to ${standardOutPath}`);
