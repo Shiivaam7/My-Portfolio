@@ -1,6 +1,6 @@
 /**
- * Generates public/resume.pdf — run: npm run generate:resume
- * Replace public/resume.pdf with your own file anytime.
+ * Generates public/resume.pdf during the portfolio build.
+ * Keep the generated resume content aligned with the portfolio and current resume.
  */
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import fs from "fs";
@@ -12,22 +12,24 @@ const outPath = path.join(__dirname, "..", "public", "resume.pdf");
 
 const resume = {
   name: "Shivam Kumar",
-  role: "AI/ML Engineer | Data Science Enthusiast",
-  education: "B.Tech AI & ML (2024 – 2028)",
+  role: "Aspiring AI/ML Engineer | Generative AI & NLP | Machine Learning",
+  education: "B.Tech Artificial Intelligence & Machine Learning, SAGE University, Indore | Jun 2024 – Jun 2028 | CGPA: 7.57/10",
   email: "shivamraj0k0r@gmail.com",
   phone: "+91 9097925538",
   github: "github.com/Shiivaam7",
   linkedin: "linkedin.com/in/shivam-kumar-b67984348",
+  portfolio: "my-portfolio-mu-fawn-aaldipuwfk.vercel.app",
   skills: [
-    "Languages: Python, C, C++, JavaScript, SQL, LaTeX",
-    "ML/DL: Regression, Random Forest, SVM, XGBoost, CNN, NLP, LLMs",
-    "Frameworks: PySpark, Scikit-Learn, PyTorch, TensorFlow, Keras",
-    "Cloud/DB: MySQL, PostgreSQL, MongoDB, Azure, AWS, GCP",
+    "Machine Learning: Supervised & Unsupervised Learning, Regression, Classification, Clustering, Feature Engineering, Model Training & Evaluation, Cross-Validation, Hyperparameter Tuning, Scikit-learn",
+    "Deep Learning & NLP: Neural Networks, PyTorch, TensorFlow, Transformers, Transfer Learning, Model Fine-Tuning, NLP, Whisper, Text Embeddings",
+    "Generative AI & LLM Engineering: LLMs, RAG, Prompt Engineering, LangChain, FAISS, Vector Databases, LLM APIs, AI Agents, Agentic AI, MCP",
+    "Data & Backend: NumPy, Pandas, Matplotlib, Seaborn, Flask, FastAPI, Hugging Face Transformers, REST APIs, PostgreSQL, SQLite",
+    "MLOps & Deployment: Hugging Face Spaces, AWS, GitHub Actions, Model & Cloud Deployment",
   ],
   projects: [
-    "RAG Based AI Teaching Assistant — Python, FAISS, Transformers, Gradio",
-    "IPL Cricket Data Analysis (2008–2024) — Pandas, Matplotlib",
-    "Insta Manager Bot — Flask, SQLite, Python",
+    "RAG-Based AI Teaching Assistant — Python, FAISS, Transformers, Whisper, Gradio",
+    "Abhedya Chakra — Mule Account Risk Screening — Python, FastAPI, React, Pandas, NumPy, Scikit-learn, Isolation Forest",
+    "ClassMate AI — Smart Attendance & Classroom Management — Python, Streamlit, Supabase, dlib, Scikit-learn, NumPy",
   ],
 };
 
@@ -40,48 +42,69 @@ const purple = rgb(0.569, 0.369, 1);
 const black = rgb(0.1, 0.1, 0.15);
 const gray = rgb(0.35, 0.35, 0.4);
 
-let y = 740;
+let y = 750;
+const left = 44;
+const right = 568;
+const maxWidth = right - left;
 
-function line(text, size = 11, font = helvetica, color = black, bold = false) {
+function wrapText(text, font, size, width) {
+  const words = text.split(/\s+/);
+  const lines = [];
+  let current = "";
+  for (const word of words) {
+    const candidate = current ? `${current} ${word}` : word;
+    if (font.widthOfTextAtSize(candidate, size) > width && current) {
+      lines.push(current);
+      current = word;
+    } else {
+      current = candidate;
+    }
+  }
+  if (current) lines.push(current);
+  return lines;
+}
+
+function line(text, size = 9, font = helvetica, color = black, bold = false) {
   const usedFont = bold ? helveticaBold : font;
-  page.drawText(text, { x: 50, y, size, font: usedFont, color });
-  y -= size + 8;
+  for (const wrapped of wrapText(text, usedFont, size, maxWidth)) {
+    if (y < 42) return;
+    page.drawText(wrapped, { x: left, y, size, font: usedFont, color });
+    y -= size + 4;
+  }
 }
 
 function section(title) {
-  y -= 6;
-  page.drawText(title, { x: 50, y, size: 13, font: helveticaBold, color: purple });
-  y -= 20;
+  y -= 4;
+  if (y < 52) return;
+  page.drawText(title, { x: left, y, size: 11, font: helveticaBold, color: purple });
+  y -= 7;
   page.drawLine({
-    start: { x: 50, y: y + 12 },
-    end: { x: 562, y: y + 12 },
-    thickness: 1,
+    start: { x: left, y },
+    end: { x: right, y },
+    thickness: 0.7,
     color: purple,
   });
-  y -= 8;
+  y -= 12;
 }
 
-line(resume.name, 24, helveticaBold, purple, true);
-line(resume.role, 12, helvetica, gray);
-y -= 4;
-line(`${resume.email}  |  ${resume.phone}`, 10, helvetica, gray);
-line(`${resume.github}  |  ${resume.linkedin}`, 10, helvetica, gray);
+line(resume.name, 20, helveticaBold, purple, true);
+line(resume.role, 9, helvetica, gray);
+line(`${resume.email} | ${resume.phone}`, 8, helvetica, gray);
+line(`${resume.github} | ${resume.linkedin}`, 8, helvetica, gray);
+line(resume.portfolio, 8, helvetica, gray);
 
 section("Education");
-line(resume.education);
+line(resume.education, 8);
 
-section("Skills");
-for (const s of resume.skills) line(s, 10);
+section("Technical Skills");
+for (const skill of resume.skills) line(skill, 7.5);
 
 section("Projects");
-for (const p of resume.projects) line(`• ${p}`, 10);
+for (const project of resume.projects) line(project, 8);
 
-section("Certifications");
-line("AWS Academy — Machine Learning Foundations");
-line("SAMTRIX PMR | Course Attendance Certificates");
-
-y -= 8;
-line("Full portfolio: Deploy your site URL here", 9, helvetica, gray);
+section("Experience & Achievements");
+line("VOID HACKS — Hackathon Participant", 8);
+line("Participation in a hackathon focused on collaborative problem-solving and building practical solutions.", 7.5);
 
 const pdfBytes = await doc.save();
 fs.mkdirSync(path.dirname(outPath), { recursive: true });
