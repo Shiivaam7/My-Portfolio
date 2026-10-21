@@ -21,8 +21,8 @@ export const SKILL_CATEGORIES = [
   {
     title: "Machine Learning",
     groups: [
-      ["Supervised & Unsupervised Learning", "Regression", "Classification", "Clustering"],
-      ["Feature Engineering", "Model Training & Evaluation", "Cross-Validation", "Hyperparameter Tuning", "Scikit-learn"],
+      ["Python", "Supervised & Unsupervised Learning", "Regression", "Classification"],
+      ["Feature Engineering", "Model Training & Evaluation", "Cross-Validation", "Scikit-learn"],
     ],
   },
   {
@@ -35,7 +35,7 @@ export const SKILL_CATEGORIES = [
   {
     title: "Generative AI & LLM Engineering",
     groups: [
-      ["LLMs", "RAG (Retrieval-Augmented Generation)", "Prompt Engineering", "LangChain"],
+      ["Large Language Models", "RAG", "Prompt Engineering", "LangChain"],
       ["FAISS", "Vector Databases", "LLM APIs", "AI Agents", "Agentic AI", "MCP"],
     ],
   },
@@ -43,14 +43,14 @@ export const SKILL_CATEGORIES = [
     title: "Data & Backend",
     groups: [
       ["NumPy", "Pandas", "Matplotlib", "Seaborn"],
-      ["Flask", "FastAPI", "Hugging Face Transformers", "REST APIs", "PostgreSQL", "SQLite"],
+      ["Flask", "FastAPI", "REST APIs", "SQL", "PostgreSQL", "SQLite", "Git", "GitHub"],
     ],
   },
   {
     title: "MLOps & Deployment",
     groups: [
-      ["Hugging Face Spaces", "AWS", "GitHub Actions"],
-      ["Model & Cloud Deployment"],
+      ["Hugging Face", "Streamlit", "AWS", "GitHub Actions"],
+      ["Model Deployment", "Model & Cloud Deployment"],
     ],
   },
 ] as const;
@@ -84,6 +84,15 @@ export const PROJECTS = [
     liveDemo: "https://classmate-main.streamlit.app/",
     gradient: "from-[#915EFF] to-[#00FFFF]",
   },
+  {
+    id: "insta-bot",
+    title: "Insta Manager Bot",
+    description:
+      "Instagram automation dashboard with analytics and tracking for smarter social growth.",
+    tech: ["Flask", "SQLite", "Python"],
+    github: "https://github.com/Shiivaam7/insta-manager-bot",
+    gradient: "from-[#FF00FF] to-[#915EFF]",
+  },
 ] as const;
 
 export const TIMELINE = [
@@ -115,7 +124,7 @@ export const LOADER_STEPS = [
 ] as const;
 
 export const ABOUT_COUNTERS = [
-  { label: "Major Projects", value: 3, suffix: "+" },
+  { label: "Major Projects", value: 4, suffix: "+" },
   { label: "Focus", text: "Machine Learning & Generative AI" },
   { label: "Learning", text: "Building Practical AI Systems" },
   { label: "Passion", text: "AI/ML Engineering" },

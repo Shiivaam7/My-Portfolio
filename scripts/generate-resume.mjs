@@ -1,6 +1,7 @@
 /**
- * Generates public/resume.pdf during the portfolio build.
- * Keep the generated resume content aligned with the portfolio and current resume.
+ * Generates the downloadable resume PDF(s) needed by the portfolio.
+ * Keep the primary resume output compatible with the existing site URL while also
+ * preserving the public/resume.pdf convenience path used by the project docs.
  */
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import fs from "fs";
@@ -8,7 +9,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const outPath = path.join(__dirname, "..", "public", "resume.pdf");
+const legacyOutPath = path.join(__dirname, "..", "public", "shivam kumar.pdf");
+const standardOutPath = path.join(__dirname, "..", "public", "resume.pdf");
 
 const resume = {
   name: "Shivam Kumar",
@@ -20,16 +22,17 @@ const resume = {
   linkedin: "linkedin.com/in/shivam-kumar-b67984348",
   portfolio: "my-portfolio-mu-fawn-aaldipuwfk.vercel.app",
   skills: [
-    "Machine Learning: Supervised & Unsupervised Learning, Regression, Classification, Clustering, Feature Engineering, Model Training & Evaluation, Cross-Validation, Hyperparameter Tuning, Scikit-learn",
+    "Machine Learning: Python, Supervised & Unsupervised Learning, Regression, Classification, Feature Engineering, Model Training & Evaluation, Cross-Validation, Scikit-learn",
     "Deep Learning & NLP: Neural Networks, PyTorch, TensorFlow, Transformers, Transfer Learning, Model Fine-Tuning, NLP, Whisper, Text Embeddings",
-    "Generative AI & LLM Engineering: LLMs, RAG, Prompt Engineering, LangChain, FAISS, Vector Databases, LLM APIs, AI Agents, Agentic AI, MCP",
-    "Data & Backend: NumPy, Pandas, Matplotlib, Seaborn, Flask, FastAPI, Hugging Face Transformers, REST APIs, PostgreSQL, SQLite",
-    "MLOps & Deployment: Hugging Face Spaces, AWS, GitHub Actions, Model & Cloud Deployment",
+    "Generative AI & LLM Engineering: Large Language Models, RAG, Prompt Engineering, LangChain, FAISS, Vector Databases, LLM APIs, AI Agents, Agentic AI, MCP",
+    "Data & Backend: NumPy, Pandas, Matplotlib, Seaborn, Flask, FastAPI, REST APIs, SQL, PostgreSQL, SQLite, Git, GitHub",
+    "MLOps & Deployment: Hugging Face, Streamlit, AWS, GitHub Actions, Model Deployment, Model & Cloud Deployment",
   ],
   projects: [
     "RAG-Based AI Teaching Assistant — Python, FAISS, Transformers, Whisper, Gradio",
     "Abhedya Chakra — Mule Account Risk Screening — Python, FastAPI, React, Pandas, NumPy, Scikit-learn, Isolation Forest",
     "ClassMate AI — Smart Attendance & Classroom Management — Python, Streamlit, Supabase, dlib, Scikit-learn, NumPy",
+    "Insta Manager Bot — Flask, SQLite, Python",
   ],
 };
 
@@ -107,6 +110,8 @@ line("VOID HACKS — Hackathon Participant", 8);
 line("Participation in a hackathon focused on collaborative problem-solving and building practical solutions.", 7.5);
 
 const pdfBytes = await doc.save();
-fs.mkdirSync(path.dirname(outPath), { recursive: true });
-fs.writeFileSync(outPath, pdfBytes);
-console.log(`Resume written to ${outPath}`);
+fs.mkdirSync(path.dirname(legacyOutPath), { recursive: true });
+fs.writeFileSync(legacyOutPath, pdfBytes);
+fs.writeFileSync(standardOutPath, pdfBytes);
+console.log(`Resume written to ${legacyOutPath}`);
+console.log(`Resume written to ${standardOutPath}`);
